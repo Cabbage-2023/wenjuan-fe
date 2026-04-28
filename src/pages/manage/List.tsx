@@ -5,6 +5,7 @@ import { Typography } from 'antd'
 
 import styles from './common.module.scss'
 import QuestionCard from '../../components/QuestionCard'
+import ListSearch from '../../components/ListSearch'
 
 const {Title}=Typography
 
@@ -31,7 +32,7 @@ const List:FC=()=>{
           <Title level={3}>我的问卷</Title>
         </div>
         <div className={styles.right}>
-          搜索
+          <ListSearch />
         </div>
       </div>
       
