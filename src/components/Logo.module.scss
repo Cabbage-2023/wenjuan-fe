@@ -1,0 +1,18 @@
+.container {
+  width: 200px;
+  margin: 12px 0;
+  
+  // 开启 Flex 布局
+  display: flex;
+  justify-content: center; // 水平居中
+  align-items: center;     // 垂直居中
+  
+  // 顺便把 antd Title 的默认间距消掉
+  :global(.ant-typography) {
+    margin: 0 !important;
+  }
+
+  h1{
+    color: #f7f7f7;
+  }
+}

@@ -1,5 +1,13 @@
 import React,{type FC} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import { Button,Typography } from 'antd'
+
+import { MANAGE_INDEX_PATHNAME } from '../router/index'
+import styles from './Home.module.scss'
+
+
+const { Title,Paragraph } = Typography;
+
 
 const Home:FC=()=>{
   const nav=useNavigate()
@@ -11,11 +19,15 @@ const Home:FC=()=>{
   }
 
   return(
-    <div>
-      <p>Home</p>
-      <div>
-        <button onClick={clickHandler}>登录</button>
-        <Link to="/register?a=10">注册</Link>
+    <div className={styles.container}>
+      <div className={styles.info}>
+        <Title>问卷调查 | 在线投票</Title>
+        <Paragraph>
+          已累计创建问卷100份，发布问卷90份，收到答卷980份
+        </Paragraph>
+        <div>
+          <Button type="primary" onClick={()=>nav(MANAGE_INDEX_PATHNAME)}>开始使用</Button>
+        </div>
       </div>
     </div>
   )
