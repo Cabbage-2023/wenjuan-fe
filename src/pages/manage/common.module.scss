@@ -1,0 +1,27 @@
+.header{
+  display: flex;
+  align-items: center; // 🌟 建议加上这个，让“我的问卷”和右边的“搜索”垂直居中对齐
+  margin-bottom: 20px; // 给整个 header 下方留点空隙，别贴着列表
+
+  .left{
+    flex: 1;
+
+    // 针对 antd 的 Title 进行样式重置
+    h3, :global(.ant-typography) { 
+      margin-top: 0 !important;    // 强行取消上边距
+      margin-bottom: 0;            // 如果你想彻底顶格，下边距也可以取消
+    }
+  }
+  .right{
+    flex: 1;
+    text-align: right;
+  }
+}
+
+.content{
+  margin-bottom: 20px;
+}
+
+.footer{
+  text-align: center;
+}
