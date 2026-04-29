@@ -21,6 +21,7 @@ export default defineConfig([
     rules: {
       // 将“已定义但未使用”的警告变为黄色警告
       '@typescript-eslint/no-unused-vars': 'warn',
+      "@typescript-eslint/no-explicit-any": "warn"
     },
   },
 ])

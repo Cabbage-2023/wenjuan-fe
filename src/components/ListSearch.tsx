@@ -35,7 +35,7 @@ const ListSearch: FC = () => {
       value={value}
       onChange={handleChange}
       onSearch={handleSearch}
-      style={{ width: "200px" }}
+      style={{ width: "250px" }}
     />
   );
 };

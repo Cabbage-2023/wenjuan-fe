@@ -1,6 +1,7 @@
-import React,{type FC} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import React,{  type FC} from 'react'
+import {useNavigate} from 'react-router-dom'
 import { Button,Typography } from 'antd'
+import axios from 'axios'
 
 import { MANAGE_INDEX_PATHNAME } from '../router/index'
 import styles from './Home.module.scss'
@@ -11,12 +12,6 @@ const { Title,Paragraph } = Typography;
 
 const Home:FC=()=>{
   const nav=useNavigate()
-  function clickHandler(){
-    nav({
-      pathname:'/login',
-      search:'b=10',
-    })
-  }
 
   return(
     <div className={styles.container}>

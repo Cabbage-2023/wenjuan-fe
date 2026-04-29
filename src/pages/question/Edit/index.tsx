@@ -1,12 +1,16 @@
-import React,{type FC} from 'react'
-import {useParams} from 'react-router-dom'
+import React,{type FC,useEffect,useState} from 'react'
+
+import {getQuestionService} from '../../../services/question'
+import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
 
 const Edit:FC=()=>{
-  const {id=''}=useParams()
+  const {loading,data}=useLoadQuestionData()
 
   return(
     <>
-      <p>Edit {id}</p>
+      <p>Edit page</p>
+      {loading?<p>Loading..</p>:<p>{JSON.stringify(data)}</p>}
+      
     </>
   )
 }
