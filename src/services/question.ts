@@ -2,10 +2,10 @@ import axios, { ResDataType } from "./ajax";
 
 type SearchOption = {
   keyword?: string;
-  //page
-  //size
   isStar?:boolean
   isDeleted?:boolean
+  page?: number;
+  pageSize?: number;
   //isPublished
 };
 

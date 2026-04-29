@@ -6,6 +6,7 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import styles from "./common.module.scss";
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
+import ListPage from '../../components/ListPage'
 
 interface QuestionDataType {
   _id: string;
@@ -103,6 +104,10 @@ const Trash: FC = () => {
         {loading && <div style={{textAlign:'center'}}><Spin /></div>}
         {!loading && list.length === 0 && <Empty description="暂无回收站问卷" />}
         {list.length > 0 && TabelElem}
+      </div>
+
+      <div className={styles.footer}>
+        <ListPage total={total} />
       </div>
     </>
   );

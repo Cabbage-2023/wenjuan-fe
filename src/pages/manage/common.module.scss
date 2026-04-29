@@ -23,5 +23,8 @@
 }
 
 .footer{
-  text-align: center;
+  display: flex;
+  justify-content: center; // 水平居中
+  align-items: center;     // 垂直居中（如果需要）
+  margin-top: 20px;
 }
