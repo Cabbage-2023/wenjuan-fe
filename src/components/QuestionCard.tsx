@@ -1,5 +1,14 @@
-import React, { type FC } from "react";
-import { Button, Flex, Divider, Space,Tag,Popconfirm,Modal,message } from "antd";
+import React, { type FC, useState } from "react";
+import {
+  Button,
+  Flex,
+  Divider,
+  Space,
+  Tag,
+  Popconfirm,
+  Modal,
+  message,
+} from "antd";
 import {
   EditOutlined,
   LineChartOutlined,
@@ -9,10 +18,12 @@ import {
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import { useNavigate, Link } from "react-router-dom";
+import { useRequest } from "ahooks";
 
 import styles from "./QuestionCard.module.scss";
+import { updateQuestionService,duplicateQuestionService } from "../services/question";
 
-const {confirm}=Modal
+const { confirm } = Modal;
 
 type PropsType = {
   _id: string;
@@ -28,21 +39,59 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
 
   const { _id, title, isPublished, isStar, answerCount, createAt } = props;
 
-  function duplicate() {
-    message.success('复制成功')
+  //修改标星
+  const [isStarState, setIsStarState] = useState(isStar);
+  const { loading: changeStarLoading, run: changeStar } = useRequest(
+    async () => {
+      await updateQuestionService(_id, { isStar: !isStarState });
+    },
+    {
+      manual: true, //手动触发
+      onSuccess: () => {
+        setIsStarState(!isStarState)
+        message.success("更新成功");
+      },
+    }
+  );
+
+  const{loading:duplicateLoading,run:duplicate}=useRequest(
+    async()=>{
+    const data=await await duplicateQuestionService(_id)
+    return data
+  },{
+    manual:true, //手动触发
+    onSuccess: (result:any) => {
+      message.success("复制成功");
+      nav(`/question/edit/${result._id}`)//跳转到新问卷的编辑页面
+    },
+  })
+
+  const [isDeletedState, setIsDeletedState] = useState(false);
+  const { loading:deleteLoading, run:deleteQuestion } = useRequest(
+    async () => {
+      await updateQuestionService(_id, { isDeleted: true });
+    },
+    {
+      manual: true, //手动触发
+      onSuccess: () => {
+        setIsDeletedState(true)
+        message.success("删除成功");
+      },
+    }
+  );
+  function del() {
+    confirm({
+      title: "确认删除吗？",
+      icon: <ExclamationCircleOutlined />,
+      okText: "确认",
+      cancelText: "取消",
+      onOk: deleteQuestion,
+    });
   }
 
-  function del(){
-    confirm({
-      title:'确认删除吗？',
-      icon:<ExclamationCircleOutlined />,
-      okText:'确认',
-      cancelText:'取消',
-      onOk:()=>{
-        message.success('删除成功')
-      }
-    })
-  }
+
+  //删除后，不展示在列表中
+  if(isDeletedState) return null
 
   return (
     <>
@@ -55,22 +104,26 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
               }
             >
               <Space>
-                {isStar && <StarOutlined style={{ color: "red" }} />}
+                {isStarState && <StarOutlined style={{ color: "red" }} />}
                 {title}
               </Space>
             </Link>
           </div>
           <div className={styles.right}>
             <Space>
-              {isPublished?<Tag color="processing">已发布</Tag>:<Tag>未发布</Tag>}
-              <span>答卷：{answerCount}</span> 
+              {isPublished ? (
+                <Tag color="processing">已发布</Tag>
+              ) : (
+                <Tag>未发布</Tag>
+              )}
+              <span>答卷：{answerCount}</span>
               <span>{createAt}</span>
-            </Space> 
+            </Space>
           </div>
         </div>
 
-        <Divider style={{margin:'12px 0'}}/>
-        
+        <Divider style={{ margin: "12px 0" }} />
+
         <div className={styles["button-container"]}>
           <div className={styles.left}>
             <Flex>
@@ -96,20 +149,32 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
 
           <div className={styles.right}>
             <Flex justify="end">
-              <Button icon={<StarOutlined />} type="text" size="small">
-                {isStar ? "取消标星" : "标星"}
+              <Button
+                icon={<StarOutlined />}
+                type="text"
+                size="small"
+                onClick={changeStar}
+                disabled={changeStarLoading}//加载中禁用，防止按钮重复点击
+              >
+                {isStarState ? "取消标星" : "标星"}
               </Button>
               <Popconfirm
                 title="确认复制吗？"
                 okText="确认"
                 cancelText="取消"
                 onConfirm={duplicate}
-                >
-                <Button icon={<CopyOutlined />} type="text" size="small">
+              >
+                <Button icon={<CopyOutlined />} type="text" size="small" disabled={duplicateLoading}>
                   复制
                 </Button>
               </Popconfirm>
-              <Button icon={<DeleteOutlined />} type="text" size="small" onClick={del}>
+              <Button
+                icon={<DeleteOutlined />}
+                type="text"
+                size="small"
+                onClick={del}
+                disabled={deleteLoading}
+              >
                 删除
               </Button>
             </Flex>

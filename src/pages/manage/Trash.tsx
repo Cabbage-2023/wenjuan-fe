@@ -1,12 +1,13 @@
 import React, { type FC, useState } from "react";
-import { useTitle } from "ahooks";
-import { Typography, Empty, Table, Tag, Button,Space,Modal,Spin } from "antd";
+import { useTitle,useRequest } from "ahooks";
+import { Typography, Empty, Table, Tag, Button,Space,Modal,Spin,message } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 import styles from "./common.module.scss";
 import ListSearch from '../../components/ListSearch'
 import useLoadQuestionListData from '../../hooks/useLoadQuestionListData'
 import ListPage from '../../components/ListPage'
+import {updateQuestionService,deleteQuestionService} from '../../services/question'
 
 interface QuestionDataType {
   _id: string;
@@ -23,10 +24,44 @@ const { confirm } = Modal;
 const Trash: FC = () => {
   useTitle("小慕问卷 - 回收站");
 
-  const {data={},loading}=useLoadQuestionListData({isDeleted:true})
+  const {data={},loading,refresh,}=useLoadQuestionListData({isDeleted:true})
   const {list=[],total=0}=data || {}
   //选中的问卷ID列表
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  //恢复选中的问卷
+  const { run:recover } = useRequest(
+    async () => {
+      for await(const id of selectedIds) {
+        await updateQuestionService(id, { isDeleted: false });
+      }
+    },
+    {
+      manual: true, //手动触发
+      debounceWait: 500, //防抖等待时间
+      onSuccess: () => {
+        message.success("恢复成功");
+        refresh()//刷新数据
+        setSelectedIds([])//清空选中Ids
+      },
+    }
+  );
+
+  //彻底删除选中的问卷
+  const { run:deleteQuestion } = useRequest(
+    async () => {
+      await deleteQuestionService(selectedIds);
+    },
+    {
+      manual: true, //手动触发
+      debounceWait: 500, //防抖等待时间
+      onSuccess: () => {
+        message.success("删除成功");
+        refresh()//刷新数据
+        setSelectedIds([])//清空选中Ids
+      },
+    }
+  );
 
   const tableColumns = [
     {
@@ -61,9 +96,7 @@ const Trash: FC = () => {
       content:'删除后将无法恢复',
       okText:'确认',
       cancelText:'取消',
-      onOk:()=>{
-        alert(JSON.stringify(selectedIds))
-      }
+      onOk:deleteQuestion,
     })
   }
 
@@ -71,7 +104,7 @@ const Trash: FC = () => {
   const TabelElem=<>
     <div style={{marginBottom:'16px'}}>
       <Space>
-        <Button type="primary" disabled={selectedIds.length === 0}>恢复</Button>
+        <Button type="primary" disabled={selectedIds.length === 0} onClick={recover}>恢复</Button>
         <Button danger disabled={selectedIds.length === 0} onClick={del}>彻底删除</Button>
       </Space>
     </div>

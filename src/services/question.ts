@@ -2,8 +2,8 @@ import axios, { ResDataType } from "./ajax";
 
 type SearchOption = {
   keyword?: string;
-  isStar?:boolean
-  isDeleted?:boolean
+  isStar?: boolean;
+  isDeleted?: boolean;
   page?: number;
   pageSize?: number;
   //isPublished
@@ -21,10 +21,34 @@ export async function createQuestionService(): Promise<ResDataType> {
   return data;
 }
 
+// 获取问题列表
 export async function getQuestionListService(
   opt: Partial<SearchOption> = {}
 ): Promise<ResDataType> {
   const url = `/api/question`;
-  const data = (await axios.get(url,{params:opt})) as ResDataType;
+  const data = (await axios.get(url, { params: opt })) as ResDataType;
+  return data;
+}
+
+// 更新当前问题
+export async function updateQuestionService(
+  id: string,
+  opt: { [key: string]: any }
+): Promise<ResDataType> {
+  const url = `/api/question/${id}`;
+  const data = (await axios.patch(url, opt)) as ResDataType;
+  return data;
+}
+
+//复制问卷
+export async function duplicateQuestionService(id: string): Promise<ResDataType> {
+  const url = `/api/question/duplicate/${id}`;
+  const data = (await axios.post(url)) as ResDataType;
+  return data;
+}
+
+export async function deleteQuestionService(ids: string[]): Promise<ResDataType> {
+  const url = `/api/question`;
+  const data = (await axios.delete(url,{data:{ids}})) as ResDataType;
   return data;
 }
