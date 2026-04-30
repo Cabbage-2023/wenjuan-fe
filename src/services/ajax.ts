@@ -1,10 +1,28 @@
 import { message } from "antd";
 import axios from "axios";
 
+import { getToken } from "../utils/user-token";
+
+
 const instance = axios.create({
   timeout:10*1000,
 });
 
+// 配置请求拦截器
+instance.interceptors.request.use(
+  config=>{
+    const token=getToken()
+    if(token){
+      config.headers['Authorization']=`Bearer ${token}`//JWT固定格式
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
+
+// 响应拦截器
 instance.interceptors.response.use(
   res=>{
     const resData=(res.data||{}) as ResType

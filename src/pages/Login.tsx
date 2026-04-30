@@ -1,10 +1,15 @@
 import React, { useEffect, type FC } from "react";
-import { Space, Typography, Form, Input, Button, Flex, Checkbox } from "antd";
+import { Space, Typography, Form, Input, Button, Flex, Checkbox,message } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import { useNavigate, Link } from "react-router-dom";
+import { useRequest } from "ahooks";
+
 
 import styles from "./Login.module.scss";
-import { REGISTER_PATHNAME } from "../router/index";
+import { REGISTER_PATHNAME,MANAGE_INDEX_PATHNAME } from "../router/index";
+import { loginUserService } from "../services/user";
+import { setToken } from "../utils/user-token";
+
 
 const { Title } = Typography;
 
@@ -38,9 +43,25 @@ const Login: FC = () => {
     form.setFieldsValue({username,password})
   },[])
 
+  const {run,loading} = useRequest(
+    async (username:string,password:string)=>{
+      const data=await loginUserService(username,password)
+      return data
+    },{
+    manual:true,
+    onSuccess:(result)=>{
+      const {token=''}=result
+      //登录成功后，将token存储到localStorage
+      setToken(token)
+
+      message.success('登录成功')
+      nav(MANAGE_INDEX_PATHNAME)//跳转“我的问卷”
+    }
+  });
+
   const onFinish = (values) => {
-    console.log(values);
     const {username,password,remember} = values||{}
+    run(username,password)//触发登录请求
     
     if(remember){
       remberUser(username,password)
