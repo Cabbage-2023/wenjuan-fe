@@ -2,14 +2,15 @@ import React, { useEffect, type FC } from "react";
 import { Space, Typography, Form, Input, Button, Flex, Checkbox,message } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useRequest } from "ahooks";
 
 
 import styles from "./Login.module.scss";
 import { REGISTER_PATHNAME,MANAGE_INDEX_PATHNAME } from "../router/index";
-import { loginUserService } from "../services/user";
+import { loginUserService, getUserInfoService } from "../services/user";
 import { setToken } from "../utils/user-token";
-
+import { loginReducer } from "../store/userReducer";
 
 const { Title } = Typography;
 
@@ -35,6 +36,7 @@ function getUserInfoFromStorage(){
 
 const Login: FC = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm()//第三方hook
 
@@ -45,15 +47,21 @@ const Login: FC = () => {
 
   const {run,loading} = useRequest(
     async (username:string,password:string)=>{
-      const data=await loginUserService(username,password)
-      return data
+      // 1. 先登录
+      const loginData = await loginUserService(username, password);
+      const { token } = loginData;
+      // 🌟 关键：立即存储 Token，确保后续请求能带上它
+      setToken(token);
+
+      // 2. 再获取用户信息（此时拦截器能拿到新 Token 了）
+      const userInfo = await getUserInfoService();
+      return userInfo;
     },{
     manual:true,
     onSuccess:(result)=>{
-      const {token=''}=result
-      //登录成功后，将token存储到localStorage
-      setToken(token)
-
+      const {username='',nickname=''} =result || {}
+      // 登录成功后，将用户信息存储到redux
+      dispatch(loginReducer({ username, nickname }));
       message.success('登录成功')
       nav(MANAGE_INDEX_PATHNAME)//跳转“我的问卷”
     }

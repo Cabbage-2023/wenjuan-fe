@@ -1,20 +1,28 @@
 import React,{type FC} from 'react'
 import { Link,useNavigate } from 'react-router-dom'
-import {useRequest} from 'ahooks'
+// import {useRequest} from 'ahooks'
 import { UserOutlined } from '@ant-design/icons'
 import { Button,message } from 'antd'
+import { useDispatch } from 'react-redux'
 
 import { LOGIN_PATHNAME } from '../router/index'
-import { getUserInfoService } from '../services/user'
+// import { getUserInfoService } from '../services/user'
 import { removeToken } from '../utils/user-token'
+import useGetUserInfo from '../hooks/useGetUserInfo'
+import { logoutReducer } from '../store/userReducer'
+
+
 
 const UserInfo:FC=()=>{
   const nav=useNavigate()
+  const dispatch=useDispatch()
 
-  const {data}=useRequest(getUserInfoService)
-  const {username,nickname}=data||{}
+  // const {data}=useRequest(getUserInfoService)
+  // const {username,nickname}=data||{}
+  const {username,nickname}=useGetUserInfo()
 
   function logout(){
+    dispatch(logoutReducer())//清空了redux的用户数据
     removeToken()//退出登录
     message.success('退出登录成功')
     nav(LOGIN_PATHNAME)

@@ -1,16 +1,22 @@
-import React,{type FC} from 'react'
+import React,{type FC,useEffect,useState} from 'react'
 import { Space,Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { FormOutlined } from '@ant-design/icons';
 
 import styles from './Logo.module.scss'
+import useGetUserInfo from '../hooks/useGetUserInfo'
+import { HOME_PATHNAME,MANAGE_INDEX_PATHNAME } from '../router/index'
 
 const {Title}=Typography;
 
 const Logo:FC=()=>{
+  const {username}=useGetUserInfo()
+  // 🌟 直接计算，不需要 useState 和 useEffect
+  const pathname = username ? MANAGE_INDEX_PATHNAME : HOME_PATHNAME
+
   return(
     <div className={styles.container}>
-      <Link to="/">
+      <Link to={pathname}>
         <Space>
           <Title>
             <FormOutlined />
