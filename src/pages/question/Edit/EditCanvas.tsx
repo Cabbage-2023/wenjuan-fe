@@ -9,7 +9,7 @@ import {
   ComponentInfoType,
   changeSelectedId,
 } from "../../../store/componentsReducer";
-import { getComponentConfByType } from "../../../components";
+import { getComponentConfByType } from "../../../components/QuestionComponents";
 
 type PropsType = {
   loading: boolean;

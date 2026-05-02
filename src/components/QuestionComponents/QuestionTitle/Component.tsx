@@ -28,6 +28,7 @@ const QuestionTitle: FC<QuestionTitlePropsType> = (
       level={level}
       style={{
         textAlign: isCenter ? "center" : "start",
+        marginTop:"0" ,       // 覆盖 AntD 默认的 margin-top
         marginBottom: "0",
         fontSize: getFontSize(level),
       }}

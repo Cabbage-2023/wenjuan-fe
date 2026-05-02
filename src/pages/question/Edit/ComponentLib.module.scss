@@ -1,0 +1,28 @@
+.wrapper {
+  margin-bottom: 12px;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #fff;
+  padding: 12px;
+  border-radius: 3px;
+
+  &:hover {
+    border-color: #d9d9d9;
+  }
+}
+
+.component {
+  pointer-events: none;// 组件不可点击
+}
+
+
+
+.groupContainer {
+  &:not(:first-child) {
+    margin-top: 24px; // 组与组之间的间距
+  }
+
+  .title {
+    font-size: 14px;                // 组件库标题不宜过大               
+  }
+}
