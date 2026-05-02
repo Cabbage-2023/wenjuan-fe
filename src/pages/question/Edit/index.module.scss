@@ -1,0 +1,46 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.content-wrapper{
+  flex: auto;// 占满剩余空间
+  padding: 12px 0;
+
+}
+
+.content{
+  margin: 0 24px;
+  display: flex;
+  height: 100%;
+
+  .left{
+    width: 285px;
+    background-color: #fff;
+    padding: 0 12px;
+  }
+  .main{
+    flex:1;
+    display: flex;       // 🌟 开启 flex
+    align-items: center; // 🌟 垂直居中
+    justify-content: center; // 🌟 水平居中
+    overflow: auto; // 🌟 改为 auto，防止画布太大显示不全
+    
+    .canvas-wrapper{
+      width:400px;
+      height:650px;
+
+      overflow-x: hidden;
+      overflow-y: auto; // 画布内部滚动
+      box-shadow: 0 2px 10px #0000001f;
+    }
+  }
+  .right{
+    width: 300px;
+    background-color: #fff;
+    padding: 0 12px;
+  }
+  
+}

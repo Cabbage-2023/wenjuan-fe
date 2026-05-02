@@ -11,16 +11,13 @@ const QuestionLayout:FC=()=>{
   useNavPage(waitingUserData)
   
   return(
-    <>
-      <p>QuestionLayout</p>
-      <div className="">
-        {
-          waitingUserData 
-            ? <div style={{ textAlign: 'center', marginTop: '60px' }}><Spin /></div> // 正在加载
-            : <Outlet /> // 加载完成
-        }
-      </div>
-    </>
+    <div style={{ height: '100vh' }}>
+      {
+        waitingUserData 
+          ? <div style={{ textAlign: 'center', marginTop: '60px' }}><Spin /></div> // 正在加载
+          : <Outlet /> // 加载完成
+      }
+    </div>
   )
 }
 
