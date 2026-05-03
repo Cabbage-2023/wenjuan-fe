@@ -1,4 +1,4 @@
-import React, { FC,MouseEvent } from "react";
+import React, { FC,MouseEvent, use } from "react";
 import { Spin } from "antd";
 import { useDispatch } from "react-redux";
 import classNames from 'classnames'
@@ -10,6 +10,8 @@ import {
   changeSelectedId,
 } from "../../../store/componentsReducer";
 import { getComponentConfByType } from "../../../components/QuestionComponents";
+import useBindCanvasKeyPress from "../../../hooks/useBindCanvasKeyPress";
+
 
 type PropsType = {
   loading: boolean;
@@ -37,6 +39,9 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     dispatch(changeSelectedId(id));
   }
 
+  //绑定画布的键盘事件
+  useBindCanvasKeyPress()
+
   if (loading)
     return (
       <div style={{ textAlign: "center", marginTop: "24px" }}>
@@ -46,14 +51,16 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
 
   return (
     <div className={styles.canvas}>
-      {componentList.map((c) => {
-        const { fe_id } = c;
+      {componentList.filter((c)=>!c.isHidden).map((c) => {
+        const { fe_id,isLocked } = c;
 
         const wrapperDefaultClassName=styles['component-wrapper']
         const selectedClassName=styles.selected
+        const lockedClassName=styles.locked
         const wrapperClassName=classNames({
           [wrapperDefaultClassName]:true,
-          [selectedClassName]:fe_id===selectedId
+          [selectedClassName]:fe_id===selectedId,
+          [lockedClassName]:isLocked,
         })
 
         return (

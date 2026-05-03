@@ -20,6 +20,12 @@
   border-color: #39c5bb !important;
 }
 
+.locked{
+  opacity: 0.5;
+  cursor: not-allowed;
+  
+}
+
 .component{
   pointer-events: none;//屏蔽鼠标行为，不可被点击
 }

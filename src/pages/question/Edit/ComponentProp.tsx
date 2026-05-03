@@ -10,13 +10,14 @@ const NoProp:FC=()=>{
   return <div style={{textAlign:'center'}}> 未选中组件</div>
 }
 
+//用于右侧的组件属性面板
 const ComponentProp:FC=()=>{
   const dispatch=useDispatch()
   const {selectedComponent}=useGetComponentInfo()
 
   if(!selectedComponent) return <NoProp />
 
-  const {type,props}=selectedComponent
+  const {type,props,isLocked,isHidden}=selectedComponent
   const componentConf=getComponentConfByType(type)
   if(!componentConf) return <NoProp />
 
@@ -27,7 +28,7 @@ const ComponentProp:FC=()=>{
   }
 
   const {PropComponent}=componentConf 
-  return <PropComponent {...props} onChange={changeProps} />
+  return <PropComponent {...props} onChange={changeProps} disabled={isLocked||isHidden} />
 }
 
 export default ComponentProp
