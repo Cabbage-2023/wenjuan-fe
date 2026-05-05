@@ -6,6 +6,7 @@ import { useDispatch} from "react-redux";
 
 import {getQuestionService} from "../services/question";
 import { resetComponents } from "../store/componentsReducer";
+import { resetPageInfo } from "../store/pageInfoReducer";
 
 
 
@@ -26,7 +27,7 @@ function useLoadQuestionData(){
   //根据获取的data设置redux store
   useEffect(()=>{
     if(!data) return
-    const {title='',componentList=[]}=data
+    const {title='',desc='',js='',css='',componentList=[]}=data
 
     let selectedId=''
     if(componentList.length>0){
@@ -35,6 +36,10 @@ function useLoadQuestionData(){
 
     //把componentList存到redux里
     dispatch(resetComponents({componentList,selectedId,copiedComponent:null}))
+
+    //把pageInfo存储到redux里
+    dispatch(resetPageInfo({title,desc,js,css}))
+
   },[data])
 
 

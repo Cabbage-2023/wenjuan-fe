@@ -6,7 +6,12 @@ import {
   LockOutlined,
   CopyOutlined,
   BlockOutlined,
+  UpOutlined,
+  DownOutlined,
+  UndoOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
+import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 import { useDispatch } from "react-redux";
 import {
@@ -15,13 +20,20 @@ import {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  moveComponent,
 } from "../../../store/componentsReducer";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 
 const EditToolbar: FC = () => {
   const dispatch = useDispatch()
-  const { selectedId, selectedComponent,copiedComponent } = useGetComponentInfo()
+  const { selectedId, selectedComponent,copiedComponent,componentList=[]  } = useGetComponentInfo()
   const { isLocked } = selectedComponent || {}
+
+  const length = componentList.length || 0
+  //当前选中组件的索引
+  const selectedIndex=componentList.findIndex(item=>item.fe_id===selectedId)
+  const isFirst=selectedIndex<=0
+  const isLast=selectedIndex>=length-1
 
   function handleDelete() {
     dispatch(removeSelectedComponent())
@@ -38,7 +50,22 @@ const EditToolbar: FC = () => {
   function paste(){
     dispatch(pasteCopiedComponent())
   }
-  //还没实现的功能 上移/下移，撤销/重做
+  //上移/下移
+  function moveUp(){
+    if(isFirst) return
+    dispatch(moveComponent({oldIndex:selectedIndex,newIndex:selectedIndex-1}))
+  }
+  function moveDown(){
+    if(isLast) return
+    dispatch(moveComponent({oldIndex:selectedIndex,newIndex:selectedIndex+1}))
+  }
+  //撤销/重做
+  function undo(){
+    dispatch(UndoActionCreators.undo())
+  }
+  function redo(){
+    dispatch(UndoActionCreators.redo())
+  }
 
   return (
     <Space>
@@ -57,6 +84,18 @@ const EditToolbar: FC = () => {
       </Tooltip>
       <Tooltip title="粘贴">
         <Button shape="circle" icon={<BlockOutlined />} onClick={paste} disabled={copiedComponent==null}></Button>
+      </Tooltip>
+      <Tooltip title="上移">
+        <Button shape="circle" icon={<UpOutlined />} onClick={moveUp} disabled={isFirst}></Button>
+      </Tooltip>
+      <Tooltip title="下移">
+        <Button shape="circle" icon={<DownOutlined />} onClick={moveDown} disabled={isLast}></Button>
+      </Tooltip>
+      <Tooltip title="撤销">
+        <Button shape="circle" icon={<UndoOutlined />} onClick={undo}></Button>
+      </Tooltip>
+      <Tooltip title="重做">
+        <Button shape="circle" icon={<RedoOutlined />} onClick={redo}></Button>
       </Tooltip>
     </Space>
   );

@@ -12,7 +12,7 @@
 }
 
 .content{
-  margin: 0 24px;
+  margin: 12px 24px;
   display: flex;
   height: 100%;
 
@@ -27,6 +27,9 @@
     align-items: center; // 🌟 垂直居中
     justify-content: center; // 🌟 水平居中
     overflow: auto; // 🌟 改为 auto，防止画布太大显示不全
+
+    background-color: #f0f2f5;
+
     
     .canvas-wrapper{
       width:400px;
