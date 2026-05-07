@@ -10,7 +10,7 @@ const Component:FC<QuestionCheckboxPropsType> = (props:QuestionCheckboxPropsType
 
   return <div>
     <Paragraph strong>{title}</Paragraph>
-    <Space direction={isVertical?"vertical":"horizontal"}>
+    <Space orientation={isVertical?"vertical":"horizontal"}>
       {list.map((item,index)=>{
         const {value,text,checked} = item;
         return <Checkbox key={value} value={value} checked={checked}>{text}</Checkbox>

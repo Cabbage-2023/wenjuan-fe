@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000, // 前端运行端口
+    port: 8000, // 前端运行端口,B端
     proxy: {
       // 只要请求路径以 /api 开头，就会触发代理
       '/api': {

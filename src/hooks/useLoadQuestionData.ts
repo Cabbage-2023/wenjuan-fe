@@ -27,7 +27,7 @@ function useLoadQuestionData(){
   //根据获取的data设置redux store
   useEffect(()=>{
     if(!data) return
-    const {title='',desc='',js='',css='',componentList=[]}=data
+    const {title='',desc='',js='',css='',isPublished=false,componentList=[]}=data
 
     let selectedId=''
     if(componentList.length>0){
@@ -38,7 +38,7 @@ function useLoadQuestionData(){
     dispatch(resetComponents({componentList,selectedId,copiedComponent:null}))
 
     //把pageInfo存储到redux里
-    dispatch(resetPageInfo({title,desc,js,css}))
+    dispatch(resetPageInfo({title,desc,js,css,isPublished}))
 
   },[data])
 
