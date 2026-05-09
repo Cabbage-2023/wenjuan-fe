@@ -1,7 +1,7 @@
 //问卷-段落组件
 
 
-import Component from "./Components";
+import Component from "./Component";
 import {QuestionParagraphDefaultProps} from "./interface";
 import PropComponent from "./PropComponent";
 
