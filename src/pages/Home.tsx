@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import { Button,Typography } from 'antd'
 import axios from 'axios'
 
-import { MANAGE_INDEX_PATHNAME } from '../router/index'
+import { MANAGE_INDEX_PATHNAME } from '../constant/index2'
 import styles from './Home.module.scss'
 
 

@@ -7,7 +7,7 @@ import { useRequest } from "ahooks";
 
 
 import styles from "./Login.module.scss";
-import { REGISTER_PATHNAME,MANAGE_INDEX_PATHNAME } from "../router/index";
+import { REGISTER_PATHNAME,MANAGE_INDEX_PATHNAME } from "../constant/index2";
 import { loginUserService, getUserInfoService } from "../services/user";
 import { setToken } from "../utils/user-token";
 import { loginReducer } from "../store/userReducer";

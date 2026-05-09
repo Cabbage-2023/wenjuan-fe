@@ -5,7 +5,7 @@ import { Link,useNavigate } from "react-router-dom";
 import { useRequest } from "ahooks";
 
 import styles from "./Register.module.scss";
-import { LOGIN_PATHNAME } from "../router/index";
+import { LOGIN_PATHNAME } from "../constant/index2";
 import { registerUserService } from "../services/user";
 
 const { Title } = Typography;

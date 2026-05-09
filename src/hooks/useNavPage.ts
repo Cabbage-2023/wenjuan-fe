@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useLocation,useNavigate } from "react-router-dom"
 
 import useGetUserInfo from "./useGetUserInfo"
-import { isLoginOrRegister,MANAGE_INDEX_PATHNAME,isNoNeedUserInfo ,LOGIN_PATHNAME} from "../router"
+import { isLoginOrRegister,MANAGE_INDEX_PATHNAME,isNoNeedUserInfo ,LOGIN_PATHNAME} from "../constant/index2"
 
 
 

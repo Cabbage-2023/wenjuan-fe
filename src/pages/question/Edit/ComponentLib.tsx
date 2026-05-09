@@ -1,4 +1,4 @@
-import React,{FC} from 'react'
+import React,{FC,useCallback} from 'react'
 import {Typography} from 'antd'
 import {useDispatch} from 'react-redux'
 import {nanoid} from 'nanoid'
@@ -14,16 +14,16 @@ const {Title}=Typography
 const GenComponent: FC<{ c: ComponentConfType }> = ({ c }) => {
   const dispatch=useDispatch()
   const {title,type,Component,defaultProps}=c
-  
+
+  const handleClick=useCallback(()=>{
   //点击组件，添加到画布
-  function handleClick(){
     dispatch(addComponent({ 
-      fe_id:nanoid(),
+      fe_id:nanoid(),//前端生成的id
       title,
       type,
       props:defaultProps
     }))
-  }
+  },[]) 
 
   return <div className={styles.wrapper} key={type} onClick={handleClick}>
     <div className={styles.component}>

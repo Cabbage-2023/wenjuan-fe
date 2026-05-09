@@ -2,7 +2,7 @@ import React,{type FC} from 'react'
 import {Result,Button} from 'antd'
 import {useNavigate} from 'react-router-dom'
 
-import {MANAGE_INDEX_PATHNAME} from '../router/index'
+import {MANAGE_INDEX_PATHNAME} from '../constant/index2'
 
 const NotFound:FC=()=>{
   const nav=useNavigate()

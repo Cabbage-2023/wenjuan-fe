@@ -5,7 +5,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { Button,message } from 'antd'
 import { useDispatch } from 'react-redux'
 
-import { LOGIN_PATHNAME } from '../router/index'
+import { LOGIN_PATHNAME } from '../constant/index2'
 // import { getUserInfoService } from '../services/user'
 import { removeToken } from '../utils/user-token'
 import useGetUserInfo from '../hooks/useGetUserInfo'

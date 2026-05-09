@@ -1,4 +1,4 @@
-import React ,{FC,useRef} from 'react'
+import React ,{FC,useRef,useMemo} from 'react'
 import { useNavigate,useParams } from 'react-router-dom'
 import {Space,Button,Typography, Input,Tooltip,InputRef,message,Popover} from 'antd'
 import { LeftOutlined,CopyOutlined,QrcodeOutlined } from '@ant-design/icons'
@@ -27,8 +27,9 @@ const StatHeader:FC=()=>{
     message.success('复制成功')//提示复制成功
   }
     
-
-  function genLinkAndQRCodeElem(){
+  //使用useMemo 1.依赖项是否经常变化 2.缓存的元素是否创建成本较高
+  //比如 富文本编辑器 之类的 适合这种，太简单的不适合
+  const LinkAndQRCodeElem=useMemo(()=>{
     if(!isPublished)return null
 
     //拼接url需要参考C端规则
@@ -49,7 +50,8 @@ const StatHeader:FC=()=>{
         <Button icon={<QrcodeOutlined/>}></Button>
       </Popover>
     </Space>
-  }
+
+  },[isPublished,id])
   
   return <div className={styles['header-wrapper']}>
     <div className={styles.header}>
@@ -60,7 +62,7 @@ const StatHeader:FC=()=>{
         </Space>
       </div>
       <div className={styles.main}>
-        {genLinkAndQRCodeElem()}
+        {LinkAndQRCodeElem}
       </div>
       <div className={styles.right}>
         <Button type='primary' onClick={()=>nav(`/question/edit/${id}`)}>编辑问卷</Button>

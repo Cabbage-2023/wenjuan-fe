@@ -1,5 +1,5 @@
-import React from 'react'
-import {BrowserRouter,createBrowserRouter,Route,Routes} from 'react-router-dom'
+import React,{lazy,Suspense} from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import MainLayout from '../layouts/MainLayout'
 import ManageLayout from '../layouts/ManageLayout'
@@ -12,8 +12,12 @@ import Register from '../pages/Register'
 import List from '../pages/manage/List'
 import Star from '../pages/manage/Star'
 import Trash from '../pages/manage/Trash'
-import Edit from '../pages/question/Edit'
-import Stat from '../pages/question/Stat'
+// import Edit from '../pages/question/Edit'
+// import Stat from '../pages/question/Stat'
+//懒加载两个较大的页面
+const Edit=lazy(()=>import('../pages/question/Edit'))
+const Stat=lazy(()=>import('../pages/question/Stat'))
+
 
 const router=createBrowserRouter([
   {
@@ -73,26 +77,12 @@ const router=createBrowserRouter([
   },
 ])
 
-export default router
-
-
-//-------------分割线-----------------
-//常用的路由路径
-export const HOME_PATHNAME='/'
-export const LOGIN_PATHNAME='/login'
-export const REGISTER_PATHNAME='/register'
-export const MANAGE_INDEX_PATHNAME='/manage/list'
-
-export function isLoginOrRegister(pathname: string){
-  if([LOGIN_PATHNAME,REGISTER_PATHNAME].includes(pathname)){
-    return true
-  }
-  return false
+const AppRouter: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
+  )
 }
 
-export function isNoNeedUserInfo(pathname: string){
-  if([HOME_PATHNAME,LOGIN_PATHNAME,REGISTER_PATHNAME].includes(pathname)){
-    return true
-  }
-  return false
-}
+export default AppRouter
