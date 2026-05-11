@@ -36,10 +36,14 @@ const List: FC = () => {
       manual: true,
       onSuccess(result) {
         const { list: newList = [], total: newTotal = 0 } = result
+
+        // ✅ 关键修复：在同步代码阶段提前锁定“是否为第一页”的状态
+        const isFirstPage = pageRef.current === 1;
         
         // 🌟 关键：根据当前页码决定是覆盖还是拼接
         setList((prevList) => {
-          if (pageRef.current === 1) return newList // 第一页：直接覆盖（解决重置问题）
+          // ✅ 使用提前锁定的状态进行判断
+          if (isFirstPage) return newList // 第一页：直接覆盖（解决重置问题）
           return [...prevList, ...newList]          // 后续页：追加
         })
 
@@ -50,13 +54,14 @@ const List: FC = () => {
   )
 
   // 🌟 2. 监听搜索词变化（这里是唯一产生警告的地方，我们用 Ref 绕过）
+  const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || ''
   useEffect(() => {
     // 当搜索词变动时，我们不 setState，而是重置 Ref 并直接发起请求
     pageRef.current = 1 
     load() 
     // 💡 这里的 ESLint 报错如果你觉得烦，可以用 // eslint-disable-line 关掉
     // 因为这确实是无限滚动业务的“刚需”
-  }, [searchParams]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [keyword]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 🌟 3. 防抖触发逻辑
   const containerRef = useRef<HTMLDivElement>(null)

@@ -2,6 +2,7 @@ import React, { type FC, useState } from "react";
 import { useTitle,useRequest } from "ahooks";
 import { Typography, Empty, Table, Tag, Button,Space,Modal,Spin,message } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import dayjs from 'dayjs'
 
 import styles from "./common.module.scss";
 import ListSearch from '../../components/ListSearch'
@@ -14,7 +15,7 @@ interface QuestionDataType {
   title: string;
   isPublished: boolean;
   answerCount: number;
-  createAt: string;
+  createdAt: string;
 }
 
 const { Title } = Typography;
@@ -85,7 +86,12 @@ const Trash: FC = () => {
     },
     {
       title: "创建时间",
-      dataIndex: "createAt",
+      dataIndex: "createdAt",
+      render: (val: string) => {
+        if (!val) return '-';
+        // dayjs 会自动处理 ISO 格式并转为本地时区
+        return dayjs(val).format('YYYY-MM-DD HH:mm');
+      }
     },
   ];
 

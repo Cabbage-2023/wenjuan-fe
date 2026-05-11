@@ -1,10 +1,11 @@
-import { message } from "antd";
+ import { message } from "antd";
 import axios from "axios";
 
 import { getToken } from "../utils/user-token";
 
 
 const instance = axios.create({
+  baseURL:"http://localhost:3005",  
   timeout:10*1000,
 });
 

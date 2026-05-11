@@ -1,6 +1,6 @@
 import React from 'react'
 // 1. 类型名变了：ComponentMeta -> Meta, ComponentStory -> StoryObj
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-vite'; // ✅ 适配 Vite
 
 import Component from '../../components/QuestionComponents/QuestionInfo/Component'
 

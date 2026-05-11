@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate, Link } from "react-router-dom";
 import { useRequest } from "ahooks";
+import dayjs from 'dayjs'
 
 import styles from "./QuestionCard.module.scss";
 import { updateQuestionService,duplicateQuestionService } from "../services/question";
@@ -31,13 +32,13 @@ type PropsType = {
   isPublished: boolean;
   isStar: boolean;
   answerCount: number;
-  createAt: string;
+  createdAt: string;
 };
 
 const QuestionCard: FC<PropsType> = (props: PropsType) => {
   const nav = useNavigate();
 
-  const { _id, title, isPublished, isStar, answerCount, createAt } = props;
+  const { _id, title, isPublished, isStar, answerCount, createdAt } = props;
 
   //修改标星
   const [isStarState, setIsStarState] = useState(isStar);
@@ -62,7 +63,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
     manual:true, //手动触发
     onSuccess: (result:any) => {
       message.success("复制成功");
-      nav(`/question/edit/${result._id}`)//跳转到新问卷的编辑页面
+      nav(`/question/edit/${result._id||result.id}`)//跳转到新问卷的编辑页面
     },
   })
 
@@ -117,7 +118,8 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
                 <Tag>未发布</Tag>
               )}
               <span>答卷：{answerCount}</span>
-              <span>{createAt}</span>
+              {/* 同样处理字符串 */}
+              <span>{dayjs(createdAt).format('YYYY-MM-DD HH:mm')}</span>
             </Space>
           </div>
         </div>

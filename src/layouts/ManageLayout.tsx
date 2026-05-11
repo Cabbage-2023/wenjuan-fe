@@ -19,7 +19,7 @@ const ManageLayout: FC = () => {
   const{loading,run:handleCreateClick}=useRequest(createQuestionService,{
     manual:true,//手动触发
     onSuccess(result){
-      nav(`/question/edit/${result?.id}`);
+      nav(`/question/edit/${result?.id||result._id}`);
       message.success("创建问卷成功");  
     }
   })
