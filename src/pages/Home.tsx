@@ -1,10 +1,12 @@
 import React,{  type FC} from 'react'
 import {useNavigate} from 'react-router-dom'
-import { Button,Typography } from 'antd'
+import { Button,Typography,message } from 'antd'
 import axios from 'axios'
 
 import { MANAGE_INDEX_PATHNAME } from '../constant/index2'
 import styles from './Home.module.scss'
+import useGetUserInfo from '../hooks/useGetUserInfo'
+
 
 
 const { Title,Paragraph } = Typography;
@@ -12,6 +14,17 @@ const { Title,Paragraph } = Typography;
 
 const Home:FC=()=>{
   const nav=useNavigate()
+  const {username}=useGetUserInfo()
+
+  function handleClick(){
+    if(username){
+      nav(MANAGE_INDEX_PATHNAME)
+    }else{
+      message.info('请先登录再操作')
+      nav('/login')
+      return
+    }
+  }
 
   return(
     <div className={styles.container}>
@@ -21,7 +34,7 @@ const Home:FC=()=>{
           已累计创建问卷100份，发布问卷90份，收到答卷980份
         </Paragraph>
         <div>
-          <Button type="primary" onClick={()=>nav(MANAGE_INDEX_PATHNAME)}>开始使用</Button>
+          <Button type="primary" onClick={handleClick}>开始使用</Button>
         </div>
       </div>
     </div>

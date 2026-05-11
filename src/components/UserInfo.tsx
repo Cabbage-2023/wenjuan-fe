@@ -40,7 +40,6 @@ const UserInfo:FC=()=>{
 
   const Login=(<Link to={LOGIN_PATHNAME}>登录</Link>)
 
-  //对于已经登录的用户显示的内容，后面再做
   return(
     <>
       {username?UserInfo:Login}

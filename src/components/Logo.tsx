@@ -12,11 +12,12 @@ const {Title}=Typography;
 const Logo:FC=()=>{
   const {username}=useGetUserInfo()
   // 🌟 直接计算，不需要 useState 和 useEffect
-  const pathname = username ? MANAGE_INDEX_PATHNAME : HOME_PATHNAME
+  //const pathname = username ? MANAGE_INDEX_PATHNAME : HOME_PATHNAME
+  //忘了上面这样想干啥了，直接把logo改回默认HOME页面吧
 
   return(
     <div className={styles.container}>
-      <Link to={pathname}>
+      <Link to={HOME_PATHNAME}>
         <Space>
           <Title>
             <FormOutlined />
