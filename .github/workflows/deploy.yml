@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -24,7 +24,7 @@ jobs:
             # 2. 如果该目录还不是 git 仓库，则进行初始化（仅第一次运行有效）
             if [ ! -d ".git" ]; then
               git init
-              git remote add origin git@github.com:你的GitHub用户名/你的B端仓库名.git
+              git remote add origin git@github.com:Cabbage-2023/wenjuan-frontend.git
             fi
 
             # 3. 强制同步代码：获取最新远程分支并覆盖本地改动
@@ -32,6 +32,10 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            # 4. 返回根目录，利用 docker-compose 重新构建 B 端镜像并启动
+            # 4. 从 GitHub Secret 动态创建 .env.production 文件
+            # 使用 echo 命令将变量内容写入文件
+            echo "${{ secrets.ENV_PROD }}" > .env.production
+
+            # 5. 返回根目录，利用 docker-compose 重新构建 B 端镜像并启动
             cd ~/wenjuan-platform
             docker compose up -d --build client-b
