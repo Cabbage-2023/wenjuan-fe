@@ -18,24 +18,23 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # 1. 进入服务器上 B 端代码所在的子目录
-            cd ~/wenjuan-platform/client-b
+            # 1. 修正目录名：是 frontend-b 不是 client-b
+            cd ~/wenjuan-platform/frontend-b
             
-            # 2. 如果该目录还不是 git 仓库，则进行初始化（仅第一次运行有效）
             if [ ! -d ".git" ]; then
               git init
-              git remote add origin git@github.com:Cabbage-2023/wenjuan-frontend.git
+              # 这种写法更稳健：如果 origin 不存在则添加，存在则直接更新
+              git remote set-url origin https://github.com/Cabbage-2023/wenjuan-frontend.git || git remote add origin https://github.com/Cabbage-2023/wenjuan-frontend.git
             fi
 
-            # 3. 强制同步代码：获取最新远程分支并覆盖本地改动
-            # 这样可以避免你在服务器上随手改了点东西导致 git pull 冲突
             git fetch --all
             git reset --hard origin/main
 
-            # 4. 从 GitHub Secret 动态创建 .env.production 文件
-            # 使用 echo 命令将变量内容写入文件
+            # 2. 写入环境变量 (确保你在 GitHub Secret 里配置了 ENV_PROD)
             echo "${{ secrets.ENV_PROD }}" > .env.production
 
-            # 5. 返回根目录，利用 docker-compose 重新构建 B 端镜像并启动
             cd ~/wenjuan-platform
-            docker compose up -d --build client-b
+            # 3. 修正 Service 名字：对应 docker-compose 里的 client-b
+            docker compose build --no-cache client-b
+            docker compose up -d client-b
+            docker image prune -f

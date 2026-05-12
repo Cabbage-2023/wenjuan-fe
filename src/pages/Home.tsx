@@ -31,7 +31,7 @@ const Home:FC=()=>{
       <div className={styles.info}>
         <Title>问卷调查 | 在线投票</Title>
         <Paragraph>
-          已累计创建问卷100份，发布问卷90份，收到答卷980份
+          怎么感觉远程部署在服务器上比敲项目还累？
         </Paragraph>
         <div>
           <Button type="primary" onClick={handleClick}>开始使用</Button>
