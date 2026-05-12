@@ -19,11 +19,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/wenjuan-platform/frontend-b
-            git fetch --all
-            git reset --hard origin/main
-            # 必须注入 B 端环境变量，因为打包时需要它
+            git remote set-url origin git@github.com:Cabbage-2023/wenjuan-frontend.git || true
+            
+            git fetch --all && git reset --hard origin/main
+            
+            # 写入环境变量 (注意这里去掉外层的多余引号)
             echo "${{ secrets.ENV_PROD }}" > .env.production
             
             cd ~/wenjuan-platform
-            docker compose up -d --build client-b
+            docker compose build --no-cache client-b
+            docker compose up -d client-b
             docker image prune -f
