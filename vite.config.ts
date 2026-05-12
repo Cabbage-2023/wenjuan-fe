@@ -1,4 +1,3 @@
-/// <reference types="vitest/config" />
 import { defineConfig } from 'vitest/config'; // 注意这里换成 vitest 的类型定义
 import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -26,7 +25,7 @@ export default defineConfig({
     proxy: {
       // 只要请求路径以 /api 开头，就会触发代理
       "/api": {
-        target: "http://localhost:3001",
+        target: process.env.VITE_BASE_URL || "http://localhost:3001",
         // 你的 Mock 服务或真实后端地址
         changeOrigin: true // 允许跨域
         // 如果后端接口没有 /api 前缀，可以进行路径重写

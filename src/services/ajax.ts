@@ -5,7 +5,8 @@ import { getToken } from "../utils/user-token";
 
 
 const instance = axios.create({
-  baseURL:"http://localhost:3005",  
+  // 优先读取环境变量，没有则回退到 localhost
+  baseURL: import.meta.env.VITE_BASE_URL ?? "http://localhost:3005",
   timeout:10*1000,
 });
 

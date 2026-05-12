@@ -33,7 +33,9 @@ const StatHeader:FC=()=>{
     if(!isPublished)return null
 
     //拼接url需要参考C端规则
-    const url=`http://localhost:8000/question/${id}`
+    // 动态拼接 C 端地址
+    const baseCUrl = import.meta.env.VITE_C_SIDE_URL ?? "http://localhost:8000";
+    const url = `${baseCUrl}/question/${id}`;
     //生成二维码
     const QRCodeElem=(
       <div style={{textAlign:'center'}}>
