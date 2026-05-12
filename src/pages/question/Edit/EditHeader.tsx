@@ -1,5 +1,5 @@
 import React,{FC,useState,ChangeEvent,useEffect} from "react";
-import {Button,Typography,Space,Input,message} from 'antd'
+import {Button,Typography,Space,Input,message,Modal} from 'antd'
 import { LeftOutlined,EditOutlined,LoadingOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import {useNavigate,useParams} from 'react-router-dom'
@@ -53,23 +53,32 @@ const SaveButton:FC=()=>{
     }
     await updateQuestionService(id,{...pageInfo,componentList})
   },{
-    manual:true
+    manual:true,
+    // 注意：这里不写 onSuccess，保证自动保存时静默
   })
 
-  //监听快捷键
+  // 2. 封装“手动保存”逻辑：执行请求后手动触发弹窗
+  const handleManualSave = async () => {
+    await save(); // 等待请求完成
+    // 先销毁之前的弹窗，再弹新的
+    message.destroy(); 
+    message.success('保存成功');
+  };
+
+  // 3. 监听快捷键：绑定手动保存逻辑
   useKeyPress(['ctrl.s','meta.s'],(event:KeyboardEvent)=>{
     event.preventDefault()//阻止默认行为,防止浏览器保存整个页面
-    if(!loading) save()
+    if(!loading) handleManualSave()
   })
 
-  //修改后自动保存，1秒内未修改则不保存，一秒内修改了多次则只保存一次，有防抖
+  // 4. 自动保存：使用防抖，直接调用原生的 save，实现静默保存
   useDebounceEffect(()=>{
     save()
   },[componentList,pageInfo],{
     wait:1000
   })
 
-  return <Button onClick={save} disabled={loading} icon={loading?<LoadingOutlined/>:null}>保存</Button>
+  return <Button onClick={handleManualSave} disabled={loading} icon={loading?<LoadingOutlined/>:null}>保存</Button>
 }
 
 //发布按钮
@@ -95,8 +104,16 @@ const PublishButton:FC=()=>{
     }
   })
 
+  // 增加确认弹窗
+  const handlePublish = () => {
+    Modal.confirm({
+      title: '确认发布问卷？',
+      content: '发布后将开始收集数据，部分项可能无法修改。',
+      onOk: pub, // 点击确定才执行发布
+    });
+  };
 
-  return <Button type="primary" onClick={pub} disabled={loading}>发布</Button>
+  return <Button type="primary" onClick={handlePublish} disabled={loading}>发布</Button>
 }
 
 

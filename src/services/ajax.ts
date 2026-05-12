@@ -26,23 +26,28 @@ instance.interceptors.request.use(
 
 // 响应拦截器
 instance.interceptors.response.use(
-  res=>{
-    const resData=(res.data||{}) as ResType
-    const {errno,data,msg}=resData
-
-    if(errno!==0){
-      // 处理错误
-      if(msg){
-        message.error(msg)
-      }
-
-      throw new Error(msg||"请求失败")
+  res => {
+    // 状态码为 2xx 时进入这里
+    const resData = (res.data || {}) as ResType
+    const { errno, data, msg } = resData
+    if (errno !== 0) {
+      if (msg) message.error(msg)
+      throw new Error(msg || "请求失败")
     }
-
     return data as any
   },
   error => {
-    message.error("网络请求错误")
+    // 🌟 状态码不是 2xx 时（比如 401, 500）进入这里
+    message.destroy() // 防止弹窗堆叠
+    
+    // 1. 尝试获取后端返回的业务错误信息
+    // 对应你后端返回的 {"errno":-1, "msg":"用户名或密码错误", "data":null}
+    const resData = error.response?.data
+    const errorMsg = resData?.msg || error.message || "网络请求错误"
+
+    // 2. 弹出真实的错误原因
+    message.error(errorMsg)
+
     return Promise.reject(error)
   }
 )
